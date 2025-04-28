@@ -1,0 +1,26 @@
+id: 1607392319 # Keep the original ID or generate a new one
+name: "Simple Model From Notes (YAML)"
+fields:
+  - name: "Question"
+  - name: "Answer"
+  - name: "SourceFile"
+  - name: "Tags" # Optional: Add if you want to handle tags as a field
+templates:
+  - name: "Card 1"
+    qfmt: "{{Question}}<br><small style='color:grey;'>Source: {{SourceFile}}</small>"
+    afmt: '{{FrontSide}}<hr id="answer">{{Answer}}'
+# Optional: Explicitly map YAML keys 'q', 'a', 'tags' to field names
+# If omitted, it will default to mapping 'q' to the first field ('Question')
+# and 'a' to the second field ('Answer').
+yaml_field_map:
+  q: "Question"
+  a: "Answer"
+  tags: "Tags" # Map the 'tags' key from YAML to the 'Tags' Anki field
+css: |
+  .card {
+   font-family: arial;
+   font-size: 20px;
+   text-align: center;
+   color: black;
+   background-color: white;
+  }
