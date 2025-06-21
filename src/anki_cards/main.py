@@ -26,12 +26,18 @@ IMG_SRC_RE = re.compile(
 )
 
 
-def calculate_deck_name(root_dir: pathlib.Path, filepath: pathlib.Path) -> str:
+def calculate_deck_name(root_dir: pathlib.Path, filepath: pathlib.Path, include_filename: bool = False) -> str:
     """Calculates the default Anki deck name from the file path."""
     relative_path = filepath.relative_to(root_dir)
     # Use parent directories for deck hierarchy, joined by ::
     # Use root directory name as the top-level deck
     parts = [root_dir.name] + list(relative_path.parts[:-1])
+    
+    # Optionally include the filename (without extension) in the hierarchy
+    if include_filename:
+        filename_without_ext = filepath.stem
+        parts.append(filename_without_ext)
+    
     return "::".join(parts) if parts else root_dir.name
 
 
@@ -81,7 +87,7 @@ def process_field_for_images(
 
 
 def find_anki_cards_in_file(
-    filepath: pathlib.Path, root_dir: pathlib.Path, model_def: AnkiModelDefinition
+    filepath: pathlib.Path, root_dir: pathlib.Path, model_def: AnkiModelDefinition, include_filename_in_deck: bool = False
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """
     Extracts Anki card data and referenced media files from a Markdown file,
@@ -89,7 +95,7 @@ def find_anki_cards_in_file(
     """
     cards: list[dict[str, Any]] = []
     all_media_for_file: set[str] = set()
-    default_deck_name = calculate_deck_name(root_dir, filepath)
+    default_deck_name = calculate_deck_name(root_dir, filepath, include_filename_in_deck)
     md_dir = filepath.parent
     relative_filepath = str(filepath.relative_to(root_dir))
     log.debug("Processing file", file=relative_filepath)
@@ -106,9 +112,9 @@ def find_anki_cards_in_file(
         content = filepath.read_text(encoding="utf-8")
         for match_num, match in enumerate(ANKI_BLOCK_RE.finditer(content)):
             yaml_content = match.group(1)
-            log.debug(
-                "Found anki block", file=relative_filepath, block_num=match_num + 1
-            )
+            # log.debug(
+            #     "Found anki block", file=relative_filepath, block_num=match_num + 1
+            # )
             try:
                 raw_card_data = yaml.safe_load(yaml_content)
                 if not isinstance(raw_card_data, dict):
@@ -319,7 +325,7 @@ def _main(args: CliArgs) -> None:
         try:
             # Pass the validated model definition for field mapping
             file_cards, file_media = find_anki_cards_in_file(
-                resolved_file_path, root_path, model_def
+                resolved_file_path, root_path, model_def, args.include_filename_in_deck
             )
             if file_cards:
                 log.debug(
