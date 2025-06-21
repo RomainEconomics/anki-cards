@@ -287,7 +287,7 @@ q: |
     What is the formula for the area of a triangle, and what do the variables represent?
 a: |
     The area is \(A = \frac{1}{2} b h\), where \(A\) is the area, \(b\) is the base, and \(h\) is the height.
-````
+```
 
 Q2
 
@@ -304,7 +304,7 @@ Things to note:
 - never use dollar signs for the latex formulas when writing question-ansers. You must use backslashes (\( \) or \[ \]) for the latex formulas in the flashcards. This is because the Anki software does not support dollar signs for latex.
 - only two questions is provided as an example, but you can create as many flashcards as you like.
 
-`````
+````
 
 </details>
 
@@ -344,4 +344,7 @@ The AI will generate properly formatted `anki` blocks that work seamlessly with 
 - Ensure your model definition has unique `id`
 - Check that all template fields are properly defined
 - Verify the `.apkg` file was generated without errors
-`````
+
+```
+
+```
