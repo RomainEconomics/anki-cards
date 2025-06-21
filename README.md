@@ -6,6 +6,7 @@ Transform your markdown notes into Anki flashcard decks automatically! This tool
 
 - **Markdown-based**: Write flashcards directly in your markdown notes
 - **Automatic deck organization**: Creates deck hierarchy based on your directory structure
+- **Flexible deck naming**: Optionally include filenames in deck hierarchy
 - **Image support**: Automatically includes images referenced in your cards
 - **Customizable card templates**: Define your own Anki note types with YAML
 - **Batch processing**: Process entire directories of notes at once
@@ -22,6 +23,11 @@ cd anki-cards
 
 # Install with uv (recommended)
 uv sync
+
+# Or install globally the package using uv tool
+uv tool install . --compile-bytecode
+# if already installed
+uv tool install . --reinstall --compile-bytecode
 
 # Or install with pip
 pip install -e .
@@ -76,27 +82,27 @@ deck: Custom::Deck::Name     # Optional, defaults to directory structure
 ```
 ````
 
-````
-
 ### Advanced Features
 
 **Include images:**
-```markdown
+
+````markdown
 ```anki
 q: What does this diagram show?
 a: This shows <img src="diagram.png" alt="Process flow"> the data flow
-````
-
+```
 ````
 
 **Multiple cards in one file:**
-```markdown
+
+````markdown
 # Machine Learning
 
 ```anki
 q: What is supervised learning?
 a: Learning with labeled training data
 tags: [ml, supervised]
+```
 ````
 
 ```anki
@@ -105,24 +111,22 @@ a: Learning patterns in data without labels
 tags: [ml, unsupervised]
 ```
 
-````
+`````
 
 **Custom deck organization:**
-```markdown
+````markdown
 ```anki
 q: What is a neural network?
 a: A computing system inspired by biological neural networks
 deck: AI::Deep Learning::Basics
-````
-
 ```
+`````
 
 ## 🏗️ Directory Structure & Deck Organization
 
 The tool automatically creates deck hierarchies based on your directory structure:
 
-```
-
+```md
 notes/
 ├── programming/
 │ ├── python/
@@ -132,8 +136,31 @@ notes/
 └── science/
 └── physics/
 └── mechanics.md → Deck: "notes::science::physics"
+```
 
-````
+### Including Filenames in Deck Hierarchy
+
+Use the `--include-filename-in-deck` flag to include markdown filenames in the deck hierarchy:
+
+```bash
+uv run build-cards --notes-directory notes --include-filename-in-deck
+```
+
+This changes the deck organization to include filenames:
+
+```md
+notes/
+├── programming/
+│ ├── python/
+│ │ └── basics.md → Deck: "notes::programming::python::basics"
+│ └── javascript/
+│ └── functions.md → Deck: "notes::programming::javascript::functions"
+└── science/
+└── physics/
+└── mechanics.md → Deck: "notes::science::physics::mechanics"
+```
+
+This is particularly useful when you have multiple markdown files in the same directory covering different topics.
 
 ## ⚙️ Configuration
 
@@ -164,7 +191,7 @@ css: |
     font-size: 20px;
     text-align: center;
   }
-````
+```
 
 Use it with:
 
@@ -183,6 +210,7 @@ Arguments:
 Options:
   --output-file FILE          Output .apkg file (default: notes_deck.apkg)
   --model-definition FILE     YAML model definition (default: default_anki_model.yaml)
+  --include-filename-in-deck  Include filename in deck hierarchy (default: false)
   --verbose                   Enable verbose logging
   --help                      Show help message
 ```
@@ -198,7 +226,11 @@ The `examples/` directory contains:
 Try it out:
 
 ```bash
+# Basic usage
 uv run build-cards --notes-directory examples/knowledge --output-file my_first_deck.apkg
+
+# With filename in deck hierarchy
+uv run build-cards --notes-directory examples/knowledge --include-filename-in-deck --output-file my_first_deck.apkg
 ```
 
 ## 🧪 Development
@@ -259,4 +291,3 @@ examples/                # Sample files and usage examples
 - Ensure your model definition has unique `id`
 - Check that all template fields are properly defined
 - Verify the `.apkg` file was generated without errors
-
