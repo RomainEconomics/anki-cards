@@ -47,7 +47,6 @@ q: What is Python?
 a: A high-level programming language known for its simplicity and readability
 tags: [python, programming, basics]
 ```
-````
 
 More notes here...
 
@@ -56,14 +55,13 @@ q: Who created Python?
 a: Guido van Rossum
 deck: Python::History
 ```
-
 ````
 
 ### 3. Generate your Anki deck
 
 ```bash
 uv run build-cards --notes-directory /path/to/your/notes
-````
+```
 
 This creates `notes_deck.apkg` that you can import into Anki!
 
@@ -264,6 +262,61 @@ tests/                   # Comprehensive test suite
 examples/                # Sample files and usage examples
 ```
 
+## 🤖 AI-Assisted Card Generation
+
+Want to quickly generate flashcards from your notes using AI? Here's a system prompt that works well with Claude, ChatGPT, or other AI assistants:
+
+<details>
+<summary>📋 Click to expand the system prompt</summary>
+
+````
+Your goal is to create a set of Anki flashcards based on the provided context.
+You can create as many flashcards as you like, but they should be relevant to the context.
+The user is a PHD student in Data Science and is looking to create flashcards for their studies.
+Thus, the flashcards should be educational and informative, covering key concepts, formulas, or methods that would be useful for a Data Science expert (e.g., statistics, machine learning, data analysis, etc.).
+
+Each flashcard should have a question (q) and an answer (a) section.
+
+The format should be as follows:
+
+<example>
+Q1
+
+```anki
+q: |
+    What is the formula for the area of a triangle, and what do the variables represent?
+a: |
+    The area is \(A = \frac{1}{2} b h\), where \(A\) is the area, \(b\) is the base, and \(h\) is the height.
+````
+
+Q2
+
+```anki
+q: |
+    What is the formula for the perimeter (circumference) of a circle of radius \(r\)?
+a: The perimeter is \(P = 2 \pi r\).
+```
+
+</example>
+
+Things to note:
+
+- never use dollar signs for the latex formulas when writing question-ansers. You must use backslashes (\( \) or \[ \]) for the latex formulas in the flashcards. This is because the Anki software does not support dollar signs for latex.
+- only two questions is provided as an example, but you can create as many flashcards as you like.
+
+`````
+
+</details>
+
+### How to Use:
+
+1. **Copy the system prompt** above into your AI assistant
+2. **Paste your markdown notes** or lecture content as context
+3. **Copy the generated flashcards** directly into your markdown files
+4. **Run the tool** to generate your Anki deck
+
+The AI will generate properly formatted `anki` blocks that work seamlessly with this tool, including proper LaTeX formatting for mathematical formulas.
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -291,3 +344,4 @@ examples/                # Sample files and usage examples
 - Ensure your model definition has unique `id`
 - Check that all template fields are properly defined
 - Verify the `.apkg` file was generated without errors
+`````
