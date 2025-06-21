@@ -19,3 +19,6 @@ class CliArgs:
 
     verbose: bool = False
     """Print detailed processing information."""
+
+    include_filename_in_deck: bool = False
+    """Include the markdown filename (without extension) in the deck hierarchy."""
