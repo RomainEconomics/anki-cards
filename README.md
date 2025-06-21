@@ -344,7 +344,3 @@ The AI will generate properly formatted `anki` blocks that work seamlessly with 
 - Ensure your model definition has unique `id`
 - Check that all template fields are properly defined
 - Verify the `.apkg` file was generated without errors
-
-```
-
-```
